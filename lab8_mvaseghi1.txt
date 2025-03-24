@@ -1,0 +1,51 @@
+
+PLAY [Configure OPS445 VM] *****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [myvm]
+
+TASK [Update Apache (httpd) to latest] *****************************************
+ok: [myvm]
+
+TASK [Install EPEL repository if not present] **********************************
+ok: [myvm]
+
+TASK [Install tree package] ****************************************************
+ok: [myvm]
+
+TASK [Set hostname to Seneca ID] ***********************************************
+ok: [myvm]
+
+TASK [Create user with Seneca ID and sudo access] ******************************
+changed: [myvm]
+
+TASK [Set up SSH key for passwordless login] ***********************************
+ok: [myvm]
+
+TASK [Allow passwordless sudo for mvaseghi1] ***********************************
+ok: [myvm]
+
+TASK [Create lab directory structure] ******************************************
+ok: [myvm] => (item=1)
+ok: [myvm] => (item=2)
+ok: [myvm] => (item=3)
+ok: [myvm] => (item=4)
+ok: [myvm] => (item=5)
+ok: [myvm] => (item=6)
+ok: [myvm] => (item=7)
+ok: [myvm] => (item=8)
+
+PLAY RECAP *********************************************************************
+myvm                       : ok=9    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+/home/mvaseghi1/ops445
+├── lab1
+├── lab2
+├── lab3
+├── lab4
+├── lab5
+├── lab6
+├── lab7
+└── lab8
+
+8 directories, 0 files
