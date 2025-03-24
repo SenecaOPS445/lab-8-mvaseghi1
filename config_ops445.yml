@@ -1,0 +1,65 @@
+---
+- name: Configure OPS445 VM
+  hosts: myvm
+  user: student
+  become: yes  # Requires sudo for most tasks
+  vars:
+    seneca_id: mvaseghi1  # Your Seneca ID
+  tasks:
+    - name: Update Apache (httpd) to latest
+      yum:
+        name: httpd
+        state: latest
+
+    - name: Install EPEL repository if not present
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Install tree package
+      yum:
+        name: tree
+        state: present  # Changed from absent to present
+
+    - name: Set hostname to Seneca ID
+      hostname:
+        name: "{{ seneca_id }}"
+
+    - name: Create user with Seneca ID and sudo access
+      user:
+        name: "{{ seneca_id }}"
+        password: "{{ 'password' | password_hash('sha512') }}"  # Replace with a secure password if needed
+        groups: wheel  # Adds to sudo group on CentOS
+        append: yes
+        state: present
+
+    - name: Set up SSH key for passwordless login
+      authorized_key:
+        user: "{{ seneca_id }}"
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        state: present
+
+    - name: Allow passwordless sudo for mvaseghi1
+      lineinfile:
+        path: /etc/sudoers.d/mvaseghi1
+        line: "{{ seneca_id }} ALL=(ALL) NOPASSWD: ALL"
+        create: yes
+        mode: '0440'
+        state: present
+
+    - name: Create lab directory structure
+      file:
+        path: "/home/{{ seneca_id }}/ops445/lab{{ item }}"
+        state: directory
+        owner: "{{ seneca_id }}"
+        group: "{{ seneca_id }}"
+        mode: '0755'
+      loop:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
